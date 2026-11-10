@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Dquick Downloader</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&family=Roboto:wght@400;500;700;800&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+	<div class="main">
+		<div class="header-container">
+			<div class="header-brand">
+				<img src="assets/icon.svg" alt="" width="40" height="40">
+				<p>Dquick Downloader</p>
+			</div>
+			<button class="menu-button" id="menu-button" type="button" aria-label="Show menu" aria-expanded="false">
+				<span class="material-symbols-outlined" aria-hidden="true">menu</span>
+			</button>
+		</div>
+		<div class="menu-content">
+			<div class="app-info">
+				<p>app version <span id="app-version">1.0.0</span></p>
+				<p>developer <span id="developer-name">Md. Aakib</span></p>
+			</div>
+			<button class="menu-item" id="downloads-button" type="button">
+				<span class="material-symbols-outlined" aria-hidden="true">download</span>downloads
+			</button>
+			<button class="menu-item" id="change-path-button" type="button">
+				<span class="material-symbols-outlined" aria-hidden="true">folder_open</span>change path
+			</button>
+			<button class="menu-item theme-button" id="theme-button" type="button">
+				<span class="material-symbols-outlined" id="theme-icon" aria-hidden="true">light_mode</span>
+				<span id="theme-label">Switch to light theme</span>
+			</button>
+		</div>
+		<div class="menu-backdrop" id="menu-backdrop"></div>
+		<dialog class="path-modal" id="path-modal" aria-labelledby="path-modal-title">
+			<div class="path-modal-heading">
+				<h2 id="path-modal-title">Download settings</h2>
+				<button class="path-modal-close" id="path-modal-close" type="button" aria-label="Close">×</button>
+			</div>
+			<input id="download-path" type="text" placeholder="Enter your path" aria-label="Download path"
+				autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">
+			<button class="path-save-button" id="path-save-button" type="button">Save</button>
+		</dialog>
+		<dialog class="path-modal" id="cookies-modal" aria-labelledby="cookies-modal-title">
+			<div class="path-modal-heading">
+				<h2 id="cookies-modal-title">Sign-in required</h2>
+				<button class="path-modal-close" id="cookies-modal-close" type="button" aria-label="Close">×</button>
+			</div>
+			<p class="settings-help">This video requires sign-in. Paste the contents of an exported Netscape-format cookies.txt file to retry. Cookies are sensitive and will only be used for this download; do not paste your account password.</p>
+			<textarea id="cookies-input" rows="8" aria-label="Netscape cookies file contents" autocomplete="off" autocapitalize="off" spellcheck="false"></textarea>
+			<button class="path-save-button" id="cookies-retry-button" type="button">Retry download</button>
+		</dialog>
+		<dialog class="path-modal file-info-modal" id="file-info-modal" aria-labelledby="file-info-title">
+			<div class="path-modal-heading">
+				<h2 id="file-info-title">File info</h2>
+				<button class="path-modal-close" id="file-info-close" type="button" aria-label="Close">×</button>
+			</div>
+			<dl class="file-info-list">
+				<div><dt>Title</dt><dd id="file-info-name"></dd></div>
+				<div><dt>Video duration</dt><dd id="file-info-duration"></dd></div>
+				<div><dt>Size</dt><dd id="file-info-size"></dd></div>
+				<div><dt>Path</dt><dd id="file-info-path"></dd></div>
+				<div><dt>Date</dt><dd id="file-info-date"></dd></div>
+			</dl>
+		</dialog>
+		<section class="downloads-screen" id="downloads-screen" aria-label="Downloads" hidden>
+			<header class="downloads-header">
+				<button class="downloads-back" id="downloads-back" type="button" aria-label="Back">
+					<span class="material-symbols-outlined" aria-hidden="true">arrow_back</span>
+				</button>
+				<h1>Downloads</h1>
+			</header>
+			<p class="downloads-empty-state" id="downloads-empty-state">No downloads available.</p>
+			<div class="downloads-list">
+				<section class="downloads-group" id="active-downloads-group" aria-labelledby="active-downloads-title" hidden>
+					<h2 id="active-downloads-title">Downloading</h2>
+					<article class="download-card active-download" id="active-download-card" hidden>
+						<div class="file-icon video-icon">
+							<span class="material-symbols-outlined" aria-hidden="true">movie</span>
+						</div>
+						<div class="file-details">
+							<h3 id="active-download-title"></h3>
+							<p><span id="download-progress-text">0%</span> · <span id="download-status"></span></p>
+							<progress id="download-progress" max="100" value="0" aria-label="Demo video download progress"></progress>
+						</div>
+						<div class="active-download-actions">
+							<button class="file-action-button" id="download-pause-button" type="button" aria-label="Pause demo download">
+								<span class="material-symbols-outlined" id="download-pause-icon" aria-hidden="true">pause</span>
+							</button>
+							<button class="file-action-button cancel-download-button" id="download-cancel-button" type="button" aria-label="Cancel demo download">
+								<span class="material-symbols-outlined" aria-hidden="true">close</span>
+							</button>
+						</div>
+					</article>
+				</section>
+				<section class="downloads-group" id="completed-downloads-group" aria-labelledby="completed-downloads-title" hidden>
+					<h2 id="completed-downloads-title">Downloaded</h2>
+					<div id="downloaded-files"></div>
+				</section>
+			</div>
+		</section>
+		<input type="text" id="url-input" placeholder="Enter URL" autocomplete="off"
+			autocapitalize="off" autocorrect="off" spellcheck="false">
+		<div class="download-controls">
+			<button id="download-button" type="button">Download</button>
+			<label class="audio-only-option" for="audio-only-checkbox">
+				<input id="audio-only-checkbox" type="checkbox">
+				<span>Audio only</span>
+			</label>
+		</div>
+		<div class="logs-container">
+			<div class="logs-toolbar">
+				<span>Logs</span>
+				<div class="logs-actions">
+					<button class="logs-action-button" id="copy-logs-button" type="button" aria-label="Copy logs" title="Copy logs">
+						<span class="material-symbols-outlined" aria-hidden="true">content_copy</span>
+					</button>
+					<button class="logs-action-button" id="clear-logs-button" type="button" aria-label="Clear logs" title="Clear logs">
+						<span class="material-symbols-outlined" aria-hidden="true">delete_sweep</span>
+					</button>
+				</div>
+			</div>
+			<p class="empty-logs">No actions right now.</p>
+			<div class="log-list" id="log-list" aria-live="polite" hidden></div>
+		</div>
+		<div class="toast" id="download-toast" role="status" aria-live="polite"></div>
+		<div class="footer-container"></div>
+	</div>
+	<script src="js/main.js" defer></script>
+</body>
+</html>

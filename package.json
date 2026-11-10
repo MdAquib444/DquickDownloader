@@ -1,0 +1,45 @@
+{
+	"name": "dquick-downloader",
+	"version": "1.0.0",
+	"private": true,
+	"description": "Dquick Downloader desktop app powered by yt-dlp",
+	"main": "electron-main.js",
+	"scripts": {
+		"start": "node server.js",
+		"desktop": "electron .",
+		"dist:win": "electron-builder --win nsis",
+		"test": "node --test"
+	},
+	"build": {
+		"appId": "com.dquick.downloader",
+		"productName": "Dquick Downloader",
+		"asarUnpack": [
+			"node_modules/ffmpeg-static/ffmpeg.exe",
+			"node_modules/youtube-dl-exec/bin/yt-dlp.exe"
+		],
+		"win": {
+			"icon": "assets\\icon.ico",
+			"target": "nsis"
+		},
+		"nsis": {
+			"oneClick": false,
+			"allowToChangeInstallationDirectory": true,
+			"createDesktopShortcut": true,
+			"createStartMenuShortcut": true
+		}
+	},
+	"dependencies": {
+		"ffmpeg-static": "^5.3.0",
+		"youtube-dl-exec": "^3.1.19"
+	},
+	"devDependencies": {
+		"electron": "^39.2.7",
+		"electron-builder": "^26.0.12"
+	},
+	"allowScripts": {
+		"electron@39.8.10": true,
+		"electron-winstaller@5.4.0": true,
+		"ffmpeg-static@5.3.0": true,
+		"youtube-dl-exec@3.1.19": true
+	}
+}
